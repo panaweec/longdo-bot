@@ -14,6 +14,8 @@
 
 import os
 import sys
+import re
+from wordreader import WordReader
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
@@ -63,11 +65,19 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
+    word = event.message.text.lower()
+    print('received:', word)
+    if re.match(r'^[a-zA-Z ]+$', word):
+        meanings = WordReader.get_meanings(word)
+        if len(meanings) > 0:
+            text = word + ' =\n' + '\n'.join(meanings)
+        else:
+            text = 'cannot find meaning of "' + word + '"'
+
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text)
+        TextSendMessage(text=text)
     )
-
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
