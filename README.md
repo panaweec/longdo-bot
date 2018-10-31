@@ -36,4 +36,4 @@ python main.py
 
 ### Support or Contact
 
-Please create an issue if you find bugs or have a comment.
+Please create an issue if you find bugs or have a comment. :)
